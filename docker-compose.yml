@@ -5,7 +5,8 @@ services:
     ports:
       - "4566:4566"
     environment:
+      - DEFAULT_REGION=us-east-2
       - SERVICES=${SERVICES- }
       - DEBUG=1
       - AWS_ACCESS_KEY_ID=foo
-      - AWS_SECRET_ACCESS_KEY=bar  
+      - AWS_SECRET_ACCESS_KEY=bar
