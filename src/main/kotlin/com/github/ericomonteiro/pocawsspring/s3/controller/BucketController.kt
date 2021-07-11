@@ -81,4 +81,18 @@ class BucketController(
         }
     }
 
+    @DeleteMapping("/{bucketName}/{objectKey}")
+    fun deleteFile(@PathVariable bucketName: String, @PathVariable objectKey: String): ResponseEntity<Any> {
+        return try {
+            s3Client.deleteObject(bucketName, objectKey)
+            ResponseEntity.status(HttpStatus.OK.value()).build()
+        } catch (ex: SdkClientException) {
+            logger.error("Error trying to delete object in bucket=$bucketName with key=$objectKey", ex)
+            ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, ErrorResponse.ApiError("0000", ex.message ?: "")))
+        } catch (ex: AmazonServiceException) {
+            logger.error("Error trying to delete object in bucket=$bucketName with key=$objectKey", ex)
+            ResponseEntity.badRequest().body(ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, ErrorResponse.ApiError("0000", ex.message ?: "")))
+        }
+    }
+
 }
